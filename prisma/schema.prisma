@@ -26,14 +26,22 @@ enum TransactionType {
 }
 
 model Task {
-  id        String     @id @default(uuid())
-  user_id   String
-  title     String
-  status    TaskStatus @default(TODO)
-  priority  String?
-  due_date  DateTime?
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
+  id          String     @id @default(uuid())
+  user_id     String
+  title       String
+  description String?    // Descrição da tarefa
+  status      TaskStatus @default(TODO)
+  priority    String?
+  due_date    DateTime?
+  order       Float      @default(0) // Usado para ordenar as tarefas
+  
+  // Relação para subtarefas
+  parentId    String?
+  parent      Task?      @relation("TaskSubtasks", fields: [parentId], references: [id], onDelete: Cascade)
+  subtasks    Task[]     @relation("TaskSubtasks")
+  
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
 }
 
 enum TaskStatus {
