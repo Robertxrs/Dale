@@ -1,0 +1,90 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Transaction {
+  id           String   @id @default(uuid())
+  user_id      String
+  amount       Float
+  type         TransactionType
+  category     String
+  date         DateTime
+  is_recurring Boolean  @default(false)
+  status       String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+enum TransactionType {
+  INCOME
+  EXPENSE
+}
+
+model Task {
+  id        String     @id @default(uuid())
+  user_id   String
+  title     String
+  status    TaskStatus @default(TODO)
+  priority  String?
+  due_date  DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+enum TaskStatus {
+  TODO
+  DOING
+  DONE
+}
+
+model Goal {
+  id              String    @id @default(uuid())
+  user_id         String
+  title           String
+  current_percent Int       @default(0)
+  target_date     DateTime?
+  image_url       String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Habit {
+  id           String   @id @default(uuid())
+  user_id      String
+  name         String
+  streak_count Int      @default(0)
+  history_logs Json?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  user_id   String
+  folder_id String?
+  title     String
+  content   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ShoppingItem {
+  id        String           @id @default(uuid())
+  user_id   String
+  name      String
+  price     Float?
+  type      ShoppingItemType
+  checked   Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  updatedAt DateTime         @updatedAt
+}
+
+enum ShoppingItemType {
+  WISH
+  MARKET
+}
